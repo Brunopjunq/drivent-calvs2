@@ -1,5 +1,5 @@
 import { notFoundError } from "@/errors";
-import { TicketEntity } from "@/protocols";
+import { TicketEntity, TicketType } from "@/protocols";
 import ticketsRepository from "@/repositories/tickets-repository";
 import { exclude } from "@/utils/prisma-utils";
 
@@ -11,8 +11,15 @@ async function getTicket(userId: number): Promise<TicketEntity> {
   return exclude(ticket, "Enrollment");
 }
 
+async function getTicketsType(): Promise<TicketType[]> {
+  const ticketsType = await ticketsRepository.getTicketsType();
+
+  return ticketsType;
+}
+
 const ticketsService = {
-  getTicket
+  getTicket,
+  getTicketsType
 };
 
 export default ticketsService;

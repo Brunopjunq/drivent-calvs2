@@ -1,6 +1,6 @@
 import { AuthenticatedRequest } from "@/middlewares";
 import ticketsService from "@/services/tickets-service";
-import { Response } from "express";
+import { Response, Request } from "express";
 import httpStatus from "http-status";
 
 export async function getTickets(req: AuthenticatedRequest, res: Response) {
@@ -12,4 +12,13 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }    
+}
+
+export async function getTicketsType(req: Request, res: Response) {
+  try {
+    const ticketsType = await ticketsService.getTicketsType();
+    return res.status(httpStatus.OK).send(ticketsType);
+  } catch (error) {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
 }

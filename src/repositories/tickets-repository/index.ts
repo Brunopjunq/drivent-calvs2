@@ -14,6 +14,10 @@ async function getTicket(userId: number) {
   });
 }
 
-const ticketsRepository = { getTicket };
+async function getTicketsType() {
+  return prisma.ticketType.findMany();
+}
+
+const ticketsRepository = { getTicket, getTicketsType };
 
 export default ticketsRepository;
