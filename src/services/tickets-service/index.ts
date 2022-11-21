@@ -17,9 +17,17 @@ async function getTicketsType(): Promise<TicketType[]> {
   return ticketsType;
 }
 
+async function insertTicket(userId: number, ticketTypeId: number): Promise<void> {
+  const userEnrollment = await ticketsRepository.findUser(userId);
+  if (!userEnrollment) throw notFoundError();
+
+  await ticketsRepository.insertTicket(ticketTypeId, userEnrollment.id);
+}
+
 const ticketsService = {
   getTicket,
-  getTicketsType
+  getTicketsType,
+  insertTicket
 };
 
 export default ticketsService;

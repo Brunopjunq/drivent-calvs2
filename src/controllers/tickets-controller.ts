@@ -22,3 +22,18 @@ export async function getTicketsType(req: Request, res: Response) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
+
+export async function insertTicket(req: AuthenticatedRequest, res: Response) {
+  const { ticketTypeId } = req.body;
+  const { userId } = req;
+
+  try {
+    const ticket = await ticketsService.insertTicket(userId, ticketTypeId);
+    return res.status(httpStatus.CREATED).send(ticket);
+  } catch (error) {
+    if (error.name === "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
