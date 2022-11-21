@@ -28,7 +28,7 @@ async function insertPayment(ticketId: number, userId: number, cardData: CardDat
   const payment = await paymentsRepository.insertPayment(ticketId, cardData, ticket.TicketType.price);
   if(!payment) throw notFoundError();
 
-  // updateTicket
+  await ticketsRepository.updateTicket(ticketId);
 
   return await getPayment(ticketId, userId);
 }

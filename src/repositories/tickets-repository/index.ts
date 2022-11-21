@@ -1,4 +1,5 @@
 import { prisma } from "@/config";
+import { TicketStatus } from "@prisma/client";
 
 async function getTicket(userId: number) {
   return prisma.ticket.findFirst({
@@ -48,6 +49,17 @@ async function findTicketById(ticketId: number) {
   });  
 }
 
-const ticketsRepository = { getTicket, getTicketsType, insertTicket, findUser, findTicketById };
+async function updateTicket(ticketId: number) {
+  return prisma.ticket.update({
+    where: {
+      id: ticketId,
+    },
+    data: {
+      status: TicketStatus.PAID
+    }
+  });  
+}
+
+const ticketsRepository = { getTicket, getTicketsType, insertTicket, findUser, findTicketById, updateTicket };
 
 export default ticketsRepository;
