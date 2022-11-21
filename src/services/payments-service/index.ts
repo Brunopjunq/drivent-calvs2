@@ -1,5 +1,5 @@
 import { notFoundError, unauthorizedError } from "@/errors";
-import { PaymentEntity, TicketEntity } from "@/protocols";
+import { PaymentEntity, TicketEntity, CardData } from "@/protocols";
 import paymentsRepository from "@/repositories/payments-repository";
 import ticketsRepository from "@/repositories/tickets-repository";
 import { exclude } from "@/utils/prisma-utils";
@@ -22,8 +22,20 @@ async function getPayment(ticketId: number, userId: number): Promise<PaymentEnti
   return payment;
 }
 
+async function insertPayment(ticketId: number, userId: number, cardData: CardData): Promise<PaymentEntity> {
+  const ticket = await checkTicket(ticketId, userId);
+    
+  const payment = await paymentsRepository.insertPayment(ticketId, cardData, ticket.TicketType.price);
+  if(!payment) throw notFoundError();
+
+  // updateTicket
+
+  return await getPayment(ticketId, userId);
+}
+
 const paymentsService = {
-  getPayment
+  getPayment,
+  insertPayment
 };
 
 export default paymentsService;
